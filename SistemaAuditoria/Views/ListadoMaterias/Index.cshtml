@@ -1,0 +1,220 @@
+﻿@model IEnumerable<SistemaAuditoria.Models.Modelos.ExpedientesIniciados>
+
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <script>
+        public function store(Request $request) {
+            dd($request -> all());
+        }
+    </script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap-grid.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" crossorigin="anonymous">
+    <script src="~/Scripts/bootstrap.js" crossorigin="anonymous"></script>
+    <title>Reporte</title>
+</head>
+<body>
+    <form method="post" action="/ListadoMaterias/Index">
+
+        <div class="container-fluid p-5 bg-primary text-white text-center" style="background-color:#9d2424 !important;">
+            <h1>Sistema Auditoría</h1>
+            <p>Iniciados y Concluidos</p>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <label for="juzddl">Selecciona el juzgado:</label>
+                    <select name="juzddl" id="juzddl" class="form-control"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group bmd-form-group">
+                        <label for="start">Fecha inicial:</label>
+                        <input CssClass="form-control" type="date" id="fecIni" name="fecIni" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;">
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group bmd-form-group">
+                        <label for="start">Fecha final:</label>
+                        <input CssClass="form-control" type="date" id="fecFin" name="fecFin" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;">
+                    </div>
+                </div>
+
+
+                <div class="col-sm-4">
+                    <label for="matddl">Selecciona la materia:</label>
+                    <select name="matddl" id="matddl" style="width: 200px; display: flex; justify-content: space-between; align-items: center; height: 59px; border: 1px solid  #cdcccc;background-color: white;border-radius: .25rem;">
+                        <option value=1>Penal</option>
+                        <option value=2>Civil</option>
+                        <option value=3>Mercantil</option>
+                        <option value=4>Laboral</option>
+                        <option value=5>Familiar</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row">
+
+                <div class="col-sm-4">
+
+                </div>
+
+                <div class="col-sm-4 p-1 m-5">
+                    <button type="submit" class="btn btn-secondary center-block" style="width: inherit;">Generar</button>
+                </div>
+
+                <div class="col-sm-4">
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    @if (Model != null)
+    {
+        @Html.ActionLink("Generar Ecel", "ExportExcel", new {})
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <p style="font-size: 20px;">Iniciados</p>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Expediente)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Materia)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Juzgado)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.fechaRadicacion)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            if (item.isRadicado)
+                            {
+
+
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Expediente)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Materia)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Juzgado)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.fechaRadicacion)
+                                    </td>
+                                    @*<td>
+                                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                        </td>*@
+                                </tr>
+                            }
+                        }
+
+                    </table>
+                </div>
+                <div class="col-1">
+                </div>
+                <div class="col-sm">
+                    <p style="font-size: 20px;">Concluidos</p>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Expediente)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Materia)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Juzgado)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.fechaTermino)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            if (!item.isRadicado)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Expediente)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Materia)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Juzgado)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.fechaTermino)
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</body>
+<script>
+    var materiaddl = document.getElementById("matddl");
+    materiaddl.addEventListener("change", Refresh);
+    Refresh();
+
+    function Refresh() {
+        fetch("@Url.Content("~/ListadoMaterias/GetJuzgadosList")" + "?idJuz=" + materiaddl.value)
+            .then(function (result) {
+                if (result.ok) {
+                    return result.json();
+                }
+            })
+            .then(function (data) {
+                console.log(data);
+                ele = document.getElementById("juzddl");
+                ele.innerHTML = "";
+                data.forEach(function (element){
+                    let op = document.createElement("option");
+                    op.appendChild(document.createTextNode(element.nombreJuzgado));
+                    op.value = element.idJuzgado;
+                    ele.appendChild(op);
+                })
+            }
+                )
+    }
+</script>
+</html>
