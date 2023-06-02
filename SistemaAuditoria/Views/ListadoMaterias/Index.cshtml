@@ -32,27 +32,17 @@
 
         <div class="container mt-5">
             <div class="row">
-
-                <div class="col-sm-12">
-                    <label for="juzddl">Selecciona el juzgado:</label>
-                    <select name="juzddl" id="juzddl" class="form-control"></select>
-                </div>
-            </div>
-        </div>
-
-        <div class="container mt-5">
-            <div class="row">
                 <div class="col-sm-4">
                     <div class="form-group bmd-form-group">
                         <label for="start">Fecha inicial:</label>
-                        <input CssClass="form-control" type="date" id="fecIni" name="fecIni" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;">
+                        <input CssClass="form-control" type="date" id="fecIni" name="fecIni" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;" required>
                     </div>
                 </div>
 
                 <div class="col-sm-4">
                     <div class="form-group bmd-form-group">
                         <label for="start">Fecha final:</label>
-                        <input CssClass="form-control" type="date" id="fecFin" name="fecFin" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;">
+                        <input CssClass="form-control" type="date" id="fecFin" name="fecFin" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;" required>
                     </div>
                 </div>
 
@@ -66,6 +56,15 @@
                         <option value=4>Laboral</option>
                         <option value=5>Familiar</option>
                     </select>
+                </div>
+                <div class="container mt-5">
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <label for="juzddl">Selecciona el juzgado:</label>
+                            <select name="juzddl" id="juzddl" class="form-control"></select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,11 +90,17 @@
 
     @if (Model != null)
     {
-        @Html.ActionLink("Generar Ecel", "ExportExcel", new {})
+
         <div class="container">
             <div class="row">
+                <form method="post" action="/ListadoMaterias/ExportExcel">
+                    <button type="submit" class="btn  btn-success" style="margin-top:20px;">Excel Export</button>
+                </form>
+            </div>
+            <div class="row">
+                
                 <div class="col-sm">
-                    <p style="font-size: 20px;">Iniciados</p>
+                    <b><p style="font-size: 20px;">Iniciados</p></b>
                     <table class="table">
                         <tr>
                             <th>
@@ -146,46 +151,47 @@
                 <div class="col-1">
                 </div>
                 <div class="col-sm">
-                    <p style="font-size: 20px;">Concluidos</p>
-                    <table class="table">
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Expediente)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Materia)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Juzgado)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.fechaTermino)
-                            </th>
-                            <th></th>
-                        </tr>
+                    <b>
+                        <p style="font-size: 20px;">Concluidos</p></b>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Expediente)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Materia)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Juzgado)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.fechaTermino)
+                                </th>
+                                <th></th>
+                            </tr>
 
-                        @foreach (var item in Model)
-                        {
-                            if (!item.isRadicado)
+                            @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Expediente)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Materia)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Juzgado)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.fechaTermino)
-                                    </td>
-                                </tr>
+                                if (!item.isRadicado)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Expediente)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Materia)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Juzgado)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.fechaTermino)
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
 
-                    </table>
+                        </table>
                 </div>
             </div>
         </div>

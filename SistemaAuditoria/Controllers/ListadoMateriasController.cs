@@ -212,25 +212,29 @@ namespace SistemaAuditoria.Controllers
                     sheet.Cells["A1:D2"].Style.Font.Bold = true;
                     sheet.Cells["G1:J2"].Style.Font.Bold = true;
                     int rowIterator = 2;
+
+                    string fechaRadicacion = "", fechaTermino = "";
+
+
                     foreach (ExpedientesIniciados item in Radicados)
                     {
                         rowIterator++;
-
+                        fechaRadicacion = item.fechaRadicacion.ToString();
                         sheet.Cells[rowIterator, 1].Value = item.Expediente;
                         sheet.Cells[rowIterator, 2].Value = item.Materia;
                         sheet.Cells[rowIterator, 3].Value = item.Juzgado;
-                        sheet.Cells[rowIterator, 4].Value = item.fechaRadicacion;
+                        sheet.Cells[rowIterator, 4].Value = fechaRadicacion;
 
                     }
                     int rowIteratorT = 2;
                     foreach (ExpedientesIniciados item in Terminados)
                     {
                         rowIteratorT++;
-
+                        fechaTermino = item.fechaTermino.ToString();
                         sheet.Cells[rowIteratorT, 7].Value = item.Expediente;
                         sheet.Cells[rowIteratorT, 8].Value = item.Materia;
                         sheet.Cells[rowIteratorT, 9].Value = item.Juzgado;
-                        sheet.Cells[rowIteratorT, 10].Value = item.fechaTermino;
+                        sheet.Cells[rowIteratorT, 10].Value = fechaTermino;
 
                     }
 

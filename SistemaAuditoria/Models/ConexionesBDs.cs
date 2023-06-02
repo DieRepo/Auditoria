@@ -12,8 +12,9 @@ namespace SistemaAuditoria.Models
         {
             try
             {
-                //Tipo 1 = PENAL *htsj_sigejupe  -  Tipo 2 = 
-                MySqlConnection conectar = new MySqlConnection();
+                //< add key = "dba" value = "Data Source=127.0.0.1; database=indicadores_pjem_laboral; Port=3306; User ID=root;Password=;" />
+                   //Tipo 1 = PENAL *htsj_sigejupe  -  Tipo 2 = die_equivalencias_catalogos -  Tipo 3 = estadistica - Tipo 4 = htsj_laboral
+                   MySqlConnection conectar = new MySqlConnection();
                 if (tipo == 1)
                 {
                     conectar = new MySqlConnection("server = 10.22.157.98; database =htsj_sigejupe; Uid =estadistica; pwd =3Stad1stiC4_2021;");
@@ -21,7 +22,7 @@ namespace SistemaAuditoria.Models
                 }
                 else if (tipo == 2)
                 {
-                    conectar = new MySqlConnection("server = 10.22.157.155; database =die_equivalencias_catalogos; Uid =Luis_Parra; pwd =Luis_Parra20230331;");
+                    conectar = new MySqlConnection("server = 127.0.0.1; Port=3306; database =die_equivalencias_catalogos; Uid =root; pwd =;");
                     conectar.Open();
                 }
                 else if (tipo == 3)
