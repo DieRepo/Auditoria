@@ -106,8 +106,10 @@ namespace SistemaAuditoria.Controllers
             conddlJuzgados = new MySqlConnection(System.Configuration.ConfigurationManager.AppSettings[idJuz.ToString()]);
             conddlJuzgados.Open();
             if (idJuz == 1 || idJuz == 3)
-                sql = "SELECT cveJuzgado,desJuzgado FROM tbljuzgados"
-                + " where activo = 'S' and desJuzgado NOT like '%FICTICIO%';";
+                sql = "SELECT distinct j.cveJuzgado,j.desJuzgado "
+                + " FROM tbljuzgados AS j"
+                + " LEFT JOIN tblcarpetasjudiciales AS cj ON j.cveJuzgado = cj.cveJuzgado"
+                + " WHERE cj.cveTipoCarpeta in (2, 3, 4)AND cj.activo = 'S' AND j.activo = 'S' and j.desJuzgado NOT like '%FICTICIO%' and j.desJuzgado NOT like '%CODIGO ANTERIOR%'; ";
             else if (idJuz == 2)
                 sql = "SELECT cveJuzgado,desJuzgado FROM htsj_laboral.tbljuzgados"
                 + " where activo = 'S' and desJuzgado NOT like '%FICTICIO%'; ";
@@ -323,8 +325,9 @@ namespace SistemaAuditoria.Controllers
                             sql = string.Format("select true as 'isRadicado',cj.fechaRadicacion as 'fechaRadicacion',concat(lpad(cj.numero,5,'0'),'/',cj.anio) 'EXPEDIENTE',j.desJuzgado as 'juzgado'"
                             + " from tblcarpetasjudiciales as cj"
                             + " left join tbljuzgados as j on cj.cveJuzgado = j.cveJuzgado"
+                            + " INNER JOIN htsj_sigejupe.tbltiposcarpetas tc on cj.cveTipoCarpeta = tc.cveTipoCarpeta"
                             + " where cj.fecharadicacion between '{0} 00:00:00' and '{1} 23:59:59'"
-                            + " and cj.activo = 'S' and cj.cvetipocarpeta in (2, 3, 4) and cj.cveJuzgado in ({2});", fechaInicio, fechaFinal, juz.idJuzgado);
+                            + " and cj.activo = 'S' and cj.cvetipocarpeta in (2, 3, 4) and j.cveJuzgado in ({2});", fechaInicio, fechaFinal, juz.idJuzgado);
                             MySqlCommand _comando = new MySqlCommand(sql, con);
                             MySqlDataReader _reader = _comando.ExecuteReader();
                             while (_reader.Read())
@@ -338,11 +341,24 @@ namespace SistemaAuditoria.Controllers
                                 LisRet.Add(exSoli);
                             }
                             _reader.Close();
-                            sql2 = string.Format("select false as 'isRadicado',cj.fechaTermino as 'fechaTermino',concat(lpad(cj.numero,5,'0'),'/',cj.anio) 'EXPEDIENTE',j.desJuzgado as 'juzgado'"
-                            + " from tblcarpetasjudiciales as cj"
-                            + " left join tbljuzgados as j on cj.cveJuzgado = j.cveJuzgado"
-                            + " where cj.fechaTermino between '{0} 00:00:00' and '{1} 23:59:59'"
-                            + " and cj.activo = 'S' and cj.cvetipocarpeta in (2, 3, 4) and cj.cveEstatusCarpeta = 2 and cj.cveJuzgado in ({2}); ", fechaInicio, fechaFinal, juz.idJuzgado);
+                            if (tipoBD == 1)
+                            {
+                                sql2 = string.Format("SELECT false as 'isRadicado',cjt.fechaTermino as 'fechaTermino',concat(lpad(cj.numero,5,'0'),'/',cj.anio) 'EXPEDIENTE',j.desJuzgado as 'juzgado'"
+                                + " FROM htsj_sigejupe.tblcarpetasjudiciales cj"
+                                + " inner join htsj_sigejupe.tbljuzgados j  on cj.cveJuzgado = j.cveJuzgado"
+                                + " Inner join htsj_sigejupe.tbltiposcarpetas tc on cj.cveTipoCarpeta = tc.cveTipoCarpeta"
+                                + " inner join htsj_sigejupe.tblcarpetasjudicialesterminadas cjt on cj.idCarpetaJudicial = cjt.idCarpetaJudicial"
+                                + " WHERE cjt.fechaTermino between '{0} 00:00:00' and '{1} 23:59:59' and cj.cveTipoCarpeta in (2, 3, 4) and j.cveJuzgado in ({2})"
+                                + " and cj.activo = 'S'; ", fechaInicio, fechaFinal, juz.idJuzgado);
+                            }
+                            else if (tipoBD == 3)
+                            {
+                                sql2 = string.Format("select false as 'isRadicado',cj.fechaTermino as 'fechaTermino',concat(lpad(cj.numero,5,'0'),'/',cj.anio) 'EXPEDIENTE',j.desJuzgado as 'juzgado'"
+                                + " from tblcarpetasjudiciales as cj"
+                                + " left join tbljuzgados as j on cj.cveJuzgado = j.cveJuzgado"
+                                + " where cj.fechaTermino between '{0} 00:00:00' and '{1} 23:59:59'"
+                                + " and cj.activo = 'S' and cj.cvetipocarpeta in (2, 3, 4) and cj.cveEstatusCarpeta = 2 and cj.cveJuzgado in ({2}); ", fechaInicio, fechaFinal, juz.idJuzgado);
+                            }
                             MySqlCommand _comandoT = new MySqlCommand(sql2, con);
                             MySqlDataReader _readerT = _comandoT.ExecuteReader();
                             while (_readerT.Read())

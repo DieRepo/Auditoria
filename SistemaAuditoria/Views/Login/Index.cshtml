@@ -16,10 +16,14 @@
     <script src="~/Scripts/bootstrap.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <div class="container-fluid p-5 bg-primary text-white text-center" style="background-color:#9d2424 !important;">
+        <h1>Sistema Auditoría</h1>
+        <p>Iniciar de sesión</p>
+    </div>
     <div class="container mt-5">
         <div class="row">
-            <div class="col-sm-4 col-sm-offset-4" >
-                <form action="@Url.Action("Index","Login")"  style="padding:10px" method="post">
+            <div class="col-sm-4 col-sm-offset-12">
+                <form action="@Url.Action("Index","Login")" style="padding:10px" method="post">
                     <i class="bi bi-box-arrow-in-right"></i>
                     <h1 class="h3 mb-3 fw-normal">Iniciar Sesión</h1>
 
