@@ -2,7 +2,13 @@
 
 @{
     Layout = null;
-}
+    List<SelectListItem> lst = new List<SelectListItem>();
+
+    lst.Add(new SelectListItem() { Text = "SIGEJUPE", Value = "1" });
+    lst.Add(new SelectListItem() { Text = "EXLAB", Value = "2" });
+    lst.Add(new SelectListItem() { Text = "SIGEPEA", Value = "3" });
+
+    }
 
 
 <!DOCTYPE html>
@@ -12,8 +18,8 @@
 
     <script>
         public function store(Request $request) {
-            dd($request -> all());
-        }
+        dd($request -> all());
+    }
     </script>
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" />
@@ -23,38 +29,63 @@
     <title>Reporte</title>
 </head>
 <body>
-    <form method="post" action="/ListadoMaterias/Index">
+    @*@using (Ajax.BeginForm("../ListadoMaterias/Index",
+    new AjaxOptions { OnSuccess = "OnSuccess", OnFailure = "OnFailure" }))
+    {
+    <fieldset>
+        @Html.DropDownList("Matddl1", lst,"", new { AutoPostBack = "false" })
+
+        <input type="submit" value="Submit" />
+    </fieldset>
+    }
+
+    <script type="text/javascript">
+
+        function OnSuccess(response) {
+            alert(response);
+        }
+
+        function OnFailure(response) {
+            alert("Whoops! That didn't go so well did it?");
+        }
+
+    </script>*@
+
+
+    <form method="post" action="~/ListadoMaterias/Index">
 
         <div class="container-fluid p-5 bg-primary text-white text-center" style="background-color:#9d2424 !important;">
             <h1>Sistema Auditoría</h1>
             <p>Iniciados y Concluidos</p>
+            <div class="row col-sm-12">
+                @Html.ActionLink("Cerrar Sesion", "CerrarSesion", "ListadoMaterias")
+            </div>
         </div>
+
 
         <div class="container mt-5">
             <div class="row">
                 <div class="col-sm-4">
                     <div class="form-group bmd-form-group">
                         <label for="start">Fecha inicial:</label>
-                        <input CssClass="form-control" type="date" id="fecIni" name="fecIni" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;" required>
+                        <input CssClass="form-control" type="date" id="fecIni" name="fecIni" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;" required value="@ViewBag.fecIni">
                     </div>
                 </div>
 
                 <div class="col-sm-4">
                     <div class="form-group bmd-form-group">
                         <label for="start">Fecha final:</label>
-                        <input CssClass="form-control" type="date" id="fecFin" name="fecFin" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;" required>
+                        <input CssClass="form-control" type="date" id="fecFin" name="fecFin" style="padding: 16px;display: flex;flex-direction: column;border: 1px solid  #cdcccc;border-radius: .25rem;" required value="@ViewBag.fecFin">
                     </div>
                 </div>
 
 
                 <div class="col-sm-4">
                     <label for="matddl">Selecciona la materia:</label>
-                    <select name="matddl" id="matddl" style="width: 200px; display: flex; justify-content: space-between; align-items: center; height: 59px; border: 1px solid  #cdcccc;background-color: white;border-radius: .25rem;">
-                        <option value=1>Penal</option>
-                        <option value=2>Civil</option>
-                        <option value=3>Mercantil</option>
-                        <option value=4>Laboral</option>
-                        <option value=5>Familiar</option>
+                    <select name="matddl" id="matddl" style="width: 200px; display: flex; justify-content: space-between; align-items: center; height: 59px; border: 1px solid  #cdcccc;background-color: white;border-radius: .25rem;" AutoPostBack="false">
+                        <option value=1>SIGEJUPE</option>
+                        <option value=2>EXLAB</option>
+                        <option value=3>SIGEPEA</option>
                     </select>
                 </div>
                 <div class="container mt-5">
@@ -62,7 +93,7 @@
 
                         <div class="col-sm-12">
                             <label for="juzddl">Selecciona el juzgado:</label>
-                            <select name="juzddl" id="juzddl" class="form-control"></select>
+                            <select name="juzddl" id="juzddl" class="form-control" AutoPostBack="false"></select>
                         </div>
                     </div>
                 </div>
@@ -77,7 +108,7 @@
                 </div>
 
                 <div class="col-sm-4 p-1 m-5">
-                    <button type="submit" class="btn btn-secondary center-block" style="width: inherit;">Generar</button>
+                    <button type="submit" class="btn btn-secondary center-block" style="width: inherit;" onclick="">Generar</button>
                 </div>
 
                 <div class="col-sm-4">
@@ -93,55 +124,41 @@
 
         <div class="container">
             <div class="row">
-                <form method="post" action="/ListadoMaterias/ExportExcel">
-                    <button type="submit" class="btn  btn-success" style="margin-top:20px;">Excel Export</button>
+                <form method="post" action="../ListadoMaterias/ExportExcel">
+                    <button type="submit" class="btn  btn-success" style="margin-top:20px;">Exportar a excel</button>
                 </form>
             </div>
             <div class="row">
-                
+
                 <div class="col-sm">
                     <b><p style="font-size: 20px;">Iniciados</p></b>
                     <table class="table">
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Expediente)
+                                @Html.DisplayNameFor(model => model.fechaRadicacion)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Materia)
+                                @Html.DisplayNameFor(model => model.Expediente)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Juzgado)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.fechaRadicacion)
-                            </th>
-                            <th></th>
                         </tr>
 
                         @foreach (var item in Model)
                         {
                             if (item.isRadicado)
                             {
-
-
                                 <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.fechaRadicacion)
+                                    </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Expediente)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Materia)
-                                    </td>
-                                    <td>
                                         @Html.DisplayFor(modelItem => item.Juzgado)
                                     </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.fechaRadicacion)
-                                    </td>
-                                    @*<td>
-                                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                                        </td>*@
                                 </tr>
                             }
                         }
@@ -152,46 +169,39 @@
                 </div>
                 <div class="col-sm">
                     <b>
-                        <p style="font-size: 20px;">Concluidos</p></b>
-                        <table class="table">
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Expediente)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Materia)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Juzgado)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.fechaTermino)
-                                </th>
-                                <th></th>
-                            </tr>
+                        <p style="font-size: 20px;">Concluidos</p>
+                    </b>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.fechaTermino)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Expediente)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Juzgado)
+                            </th>
+                        </tr>
 
-                            @foreach (var item in Model)
+                        @foreach (var item in Model)
+                        {
+                            if (!item.isRadicado)
                             {
-                                if (!item.isRadicado)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Expediente)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Materia)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Juzgado)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.fechaTermino)
-                                        </td>
-                                    </tr>
-                                }
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.fechaTermino)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Expediente)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Juzgado)
+                                    </td>
+                                </tr>
                             }
-
-                        </table>
+                        }
+                    </table>
                 </div>
             </div>
         </div>

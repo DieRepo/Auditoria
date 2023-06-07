@@ -1,0 +1,43 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap-grid.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" crossorigin="anonymous">
+    <script src="~/Scripts/bootstrap.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4" >
+                <form action="@Url.Action("Index","Login")"  style="padding:10px" method="post">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <h1 class="h3 mb-3 fw-normal">Iniciar Sesión</h1>
+
+                    <div class="form-floating">
+                        <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <label for="floatingInput">Correo electrónico</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" name="contraseña" class="form-control" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword">Contraseña</label>
+                    </div>
+
+                    <div class="form-check text-start my-3">
+                    </div>
+                    <button class="btn btn-primary w-100 py-2" type="submit">Iniciar sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
