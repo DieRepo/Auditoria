@@ -28,15 +28,19 @@ namespace SistemaAuditoria.Controllers
             {
                 ViewBag.fecIni = collection["fecIni"];
                 ViewBag.fecFin = collection["fecFin"];
-                if (collection["matddl"] == null)
-                    ViewBag.D = 1;
-                else
-                    ViewBag.D = collection["matddl"];
-                //ViewBag.juzddl = collection["juzddl"];
+                ViewBag.juzddl = collection["juzddl"];
                 string materia = collection["matddl"];
                 string fechaInicio = collection["fecIni"];
                 string fechaFinal = collection["fecFin"];
                 string juzgado = collection["juzddl"];
+                if (collection["matddl"] == null)
+                    ViewBag.D = "1";
+                else
+                {
+                    ViewBag.D = collection["matddl"];
+                    ViewBag.J = collection["juzddl"];
+
+                }
 
                 Juzgadosddl juzgadoSeleccionado = new Juzgadosddl();
                 if (juzgado != null && int.Parse(juzgado) != 0)
@@ -102,7 +106,7 @@ namespace SistemaAuditoria.Controllers
             conddlJuzgados = new MySqlConnection(System.Configuration.ConfigurationManager.AppSettings[idJuz.ToString()]);
             conddlJuzgados.Open();
             if (idJuz == 1 || idJuz == 3)
-                sql = "SELECT cveJuzgado,desJuzgado FROM htsj_sigejupe.tbljuzgados"
+                sql = "SELECT cveJuzgado,desJuzgado FROM tbljuzgados"
                 + " where activo = 'S' and desJuzgado NOT like '%FICTICIO%';";
             else if (idJuz == 2)
                 sql = "SELECT cveJuzgado,desJuzgado FROM htsj_laboral.tbljuzgados"

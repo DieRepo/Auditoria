@@ -2,11 +2,8 @@
 
 @{
     Layout = null;
-    List<SelectListItem> lst = new List<SelectListItem>();
 
-    lst.Add(new SelectListItem() { Text = "SIGEJUPE", Value = "1" });
-    lst.Add(new SelectListItem() { Text = "EXLAB", Value = "2" });
-    lst.Add(new SelectListItem() { Text = "SIGEPEA", Value = "3" });
+    string sele = "selected";
 
     }
 
@@ -18,9 +15,22 @@
 
     <script>
         public function store(Request $request) {
-        dd($request -> all());
-    }
+            dd($request -> all());
+        }
     </script>
+    <script type="text/javascript">
+        function ShowSelected() {
+            /* Para obtener el valor */
+            var cod = document.getElementById("matddl").value;
+            alert(cod);
+
+            /* Para obtener el texto */
+            var combo = document.getElementById("matddl");
+            var selected = combo.options[combo.selectedIndex].text;
+            alert(selected);
+        }
+    </script>
+
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/Content/bootstrap-grid.min.css" crossorigin="anonymous">
@@ -29,29 +39,6 @@
     <title>Reporte</title>
 </head>
 <body>
-    @*@using (Ajax.BeginForm("../ListadoMaterias/Index",
-    new AjaxOptions { OnSuccess = "OnSuccess", OnFailure = "OnFailure" }))
-    {
-    <fieldset>
-        @Html.DropDownList("Matddl1", lst,"", new { AutoPostBack = "false" })
-
-        <input type="submit" value="Submit" />
-    </fieldset>
-    }
-
-    <script type="text/javascript">
-
-        function OnSuccess(response) {
-            alert(response);
-        }
-
-        function OnFailure(response) {
-            alert("Whoops! That didn't go so well did it?");
-        }
-
-    </script>*@
-
-
     <form method="post" action="~/ListadoMaterias/Index">
 
         <div class="container-fluid p-5 bg-primary text-white text-center" style="background-color:#9d2424 !important;">
@@ -82,10 +69,10 @@
 
                 <div class="col-sm-4">
                     <label for="matddl">Selecciona la materia:</label>
-                    <select name="matddl" id="matddl" style="width: 200px; display: flex; justify-content: space-between; align-items: center; height: 59px; border: 1px solid  #cdcccc;background-color: white;border-radius: .25rem;" AutoPostBack="false">
-                        <option value=1>SIGEJUPE</option>
-                        <option value=2>EXLAB</option>
-                        <option value=3>SIGEPEA</option>
+                    <select name="matddl" id="matddl" style="width: 200px; display: flex; justify-content: space-between; align-items: center; height: 59px; border: 1px solid  #cdcccc;background-color: white;border-radius: .25rem;" selected="@ViewBag.D">
+                        <option value=1 @{ var s1 = ViewBag.D == "1" ? sele : ""; @s1}>SIGEJUPE</option>
+                        <option value=2 @{ var s2 = ViewBag.D == "2" ? sele : ""; @s2}>EXLAB</option>
+                        <option value=3 @{ var s3 = ViewBag.D == "3" ? sele : ""; @s3}>SIGEPEA</option>
                     </select>
                 </div>
                 <div class="container mt-5">
@@ -223,8 +210,12 @@
                 console.log(data);
                 ele = document.getElementById("juzddl");
                 ele.innerHTML = "";
+                var myJsVariable = '@ViewBag.J'
                 data.forEach(function (element){
                     let op = document.createElement("option");
+                    if (myJsVariable != null && myJsVariable == element.idJuzgado) {
+                        op.selected = true;
+                    }
                     op.appendChild(document.createTextNode(element.nombreJuzgado));
                     op.value = element.idJuzgado;
                     ele.appendChild(op);
