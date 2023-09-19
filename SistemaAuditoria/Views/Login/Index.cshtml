@@ -18,29 +18,31 @@
 <body>
     <div class="container-fluid p-5 bg-primary text-white text-center" style="background-color:#9d2424 !important;">
         <h1>Sistema Auditoría</h1>
-        <p>Iniciar de sesión</p>
     </div>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-sm-4 col-sm-offset-12">
-                <form action="@Url.Action("Index","Login")" style="padding:10px" method="post">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <h1 class="h3 mb-3 fw-normal">Iniciar Sesión</h1>
+    <div>
+        <br />
+        <br />
+        <br />
+    </div>
+    <div class="container col-auto col-lg-3 col-sm-5 border border-top-0">
+        <div class="position-relative">
+            <form action="@Url.Action("Index","Login")" style="padding:10px" method="post">
+                <i class="bi bi-box-arrow-in-right"></i>
+                <h1 class="h3 mb-3 fw-normal">Iniciar Sesión</h1>
 
-                    <div class="form-floating">
-                        <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="name@example.com">
-                        <label for="floatingInput">Correo electrónico</label>
-                    </div>
-                    <div class="form-floating">
-                        <input type="password" name="contraseña" class="form-control" id="floatingPassword" placeholder="Password">
-                        <label for="floatingPassword">Contraseña</label>
-                    </div>
+                <div class="form-floating">
+                    <input type="email" name="correo" class="form-control" id="floatingInput" placeholder="name@example.com">
+                    <label for="floatingInput">Correo electrónico</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" name="contraseña" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Contraseña</label>
+                </div>
 
-                    <div class="form-check text-start my-3">
-                    </div>
-                    <button class="btn btn-primary w-100 py-2" type="submit">Iniciar sesión</button>
-                </form>
-            </div>
+                <div class="form-check text-start my-3">
+                </div>
+                <button class="btn btn-primary w-100 py-2" type="submit">Iniciar sesión</button>
+            </form>
         </div>
     </div>
 </body>

@@ -11,6 +11,8 @@ namespace SistemaAuditoria.Models.Modelos
         public string Materia { get; set; }
         public string Expediente { get; set; }
         public string Juzgado { get; set; }
+        public string TipoDelito { get; set; }
+        public string Nombre { get; set; }
         public Nullable<System.DateTime> fechaRadicacion { get; set; }
         public Nullable<System.DateTime> fechaTermino { get; set; }
 

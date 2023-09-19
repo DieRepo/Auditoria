@@ -2,10 +2,15 @@
 
 @{
     Layout = null;
-
+    int cont = 0, cont2 = 0, totalR = 0, totalC = 0;
     string sele = "selected";
-
+    if (Model != null && Model.Count() > 0)
+    {
+        totalR = Model.Where(x => x.isRadicado == true).GroupBy(x => x.Expediente).Count();
+        totalC = Model.Where(x => x.isRadicado == false).GroupBy(x => x.Expediente).Count();
     }
+
+}
 
 
 <!DOCTYPE html>
@@ -39,13 +44,13 @@
     <title>Reporte</title>
 </head>
 <body>
-    <form method="post" action="~/ListadoMaterias/Index">
+    <form method="post" action="~/ListadoMaterias/Index" class=" border border-danger">
 
         <div class="container-fluid p-5 bg-primary text-white text-center" style="background-color:#9d2424 !important;">
             <h1>Sistema Auditoría</h1>
             <p>Iniciados y Concluidos</p>
             <div class="row col-sm-12">
-                @Html.ActionLink("Cerrar Sesion", "CerrarSesion", "ListadoMaterias")
+                @Html.ActionLink("Cerrar Sesion", "CerrarSesion", "ListadoMaterias", new { @style = "color:#FFFFFF;" })
             </div>
         </div>
 
@@ -69,18 +74,18 @@
 
                 <div class="col-sm-4">
                     <label for="matddl">Selecciona la materia:</label>
-                    <select name="matddl" id="matddl" style="width: 200px; display: flex; justify-content: space-between; align-items: center; height: 59px; border: 1px solid  #cdcccc;background-color: white;border-radius: .25rem;" selected="@ViewBag.D">
-                        <option value=1 @{ var s1 = ViewBag.D == "1" ? sele : ""; @s1}>SIGEJUPE</option>
-                        <option value=2 @{ var s2 = ViewBag.D == "2" ? sele : ""; @s2}>EXLAB</option>
-                        <option value=3 @{ var s3 = ViewBag.D == "3" ? sele : ""; @s3}>SIGEPEA</option>
+                    <select name="matddl" id="matddl" style="width: 200px; display: flex; justify-content: space-between; align-items: center; height: 59px; border: 1px solid  #cdcccc;background-color: white;border-radius: .25rem;" selected="@ViewBag.D" required>
+                        <option value=1 @{ var s1 = ViewBag.D == "1" ? sele : ""; @s1  }>SIGEJUPE</option>
+                        <option value=2 @{ var s2 = ViewBag.D == "2" ? sele : ""; @s2  }>EXLAB</option>
+                        <option value=3 @{ var s3 = ViewBag.D == "3" ? sele : ""; @s3  }>SIGEPEA</option>
                     </select>
                 </div>
                 <div class="container mt-5">
                     <div class="row">
 
-                        <div class="col-sm-12">
+                        <div class="col-sm-11">
                             <label for="juzddl">Selecciona el juzgado:</label>
-                            <select name="juzddl" id="juzddl" class="form-control" AutoPostBack="false"></select>
+                            <select name="juzddl" id="juzddl" class="form-control" AutoPostBack="false" required></select>
                         </div>
                     </div>
                 </div>
@@ -105,93 +110,157 @@
             </div>
         </div>
     </form>
+    @if (ViewBag.message != "")
+    {
+        <div class="alert alert-info" role="alert">
+            <center><b>¡@ViewBag.message!</b></center>
+        </div>
+    }
 
-    @if (Model != null)
+    @if (ViewBag.Mensaje != "" && (ViewBag.Mensaje == "1" || ViewBag.Mensaje == "3"))
+    {
+        <div class="alert alert-info" role="alert">
+            <center><b>Nota: Un expediente puede tener uno o más delitos, es  por eso que se podria vizualizar mas de un registro del mismo expediente.</b></center>
+        </div>
+    }
+
+    @if (Model != null && Model.Count() > 0)
     {
 
-        <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+            </div>
             <div class="row">
                 <form method="post" action="../ListadoMaterias/ExportExcel">
                     <button type="submit" class="btn  btn-success" style="margin-top:20px;">Exportar a excel</button>
                 </form>
             </div>
             <div class="row">
+                <div class="col-lg">
+                    <div class="table-responsive">
+                        <b><p style="font-size: 20px;">Iniciados</p></b>
+                        <p style="font-size: 20px;">Total de iniciados: @totalR</p>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.fechaRadicacion)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Expediente)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Juzgado)
+                                </th>
+                                <th>
+                                    @if (ViewBag.D == "2")
+                                    {
+                                        @Html.Label("Tipo Procedimiento")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayNameFor(model => model.TipoDelito)
+                                    }
+                                </th>
+                            </tr>
 
-                <div class="col-sm">
-                    <b><p style="font-size: 20px;">Iniciados</p></b>
-                    <table class="table">
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.fechaRadicacion)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Expediente)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Juzgado)
-                            </th>
-                        </tr>
-
-                        @foreach (var item in Model)
-                        {
-                            if (item.isRadicado)
+                            @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.fechaRadicacion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Expediente)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Juzgado)
-                                    </td>
-                                </tr>
+                                if (item.isRadicado)
+                                {
+                                    cont++;
+                                    <tr>
+                                        <td>
+                                            @cont
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.fechaRadicacion)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Expediente)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Juzgado)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TipoDelito)
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
 
-                    </table>
+                        </table>
+                    </div>
                 </div>
-                <div class="col-1">
-                </div>
-                <div class="col-sm">
-                    <b>
-                        <p style="font-size: 20px;">Concluidos</p>
-                    </b>
-                    <table class="table">
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.fechaTermino)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Expediente)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Juzgado)
-                            </th>
-                        </tr>
+                <div class="col-lg">
+                    <div class="table-responsive">
+                        <b>
+                            <p style="font-size: 20px;">Concluidos</p>
+                        </b>
+                        <p style="font-size: 20px;">Total de concluidos: @totalC</p>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.fechaTermino)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Expediente)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Juzgado)
+                                </th>
+                                <th>
+                                    Conclusión
+                                </th>
+                                <th>
+                                    Tipo De Conclusión
+                                </th>
+                            </tr>
 
-                        @foreach (var item in Model)
-                        {
-                            if (!item.isRadicado)
+                            @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.fechaTermino)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Expediente)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Juzgado)
-                                    </td>
-                                </tr>
+                                if (!item.isRadicado)
+                                {
+                                    cont2++;
+                                    <tr>
+                                        <td>
+                                            @cont2
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.fechaTermino)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Expediente)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Juzgado)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Nombre)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TipoDelito)
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+    }
+    else if (Model != null && Model.Count() == 0)
+    {
+        <div class="alert alert-danger" role="alert">
+            <center><b>¡Sin resultados!</b></center>
+        </div>
+
     }
 </body>
 <script>
